@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+
+{% block title %} Chatbot • CheckTune {% endblock %}
+
+{% block head %}
+<style>
+
+/* --------------------------- */
+/* MAIN CHAT CONTAINER         */
+/* --------------------------- */
+
+.chat-container {
+    background: rgba(0, 20, 25, 0.9);
+    border: 1px solid cyan;
+    box-shadow: 0 0 25px rgba(0,255,255,0.25);
+    border-radius: 16px;
+    height: 460px;
+    padding: 20px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.5s ease;
+}
+
+/* --------------------------- */
+/* MESSAGE BUBBLES             */
+/* --------------------------- */
+
+.bubble-user, .bubble-bot {
+    padding: 14px 18px;
+    margin: 12px 0;
+    border-radius: 14px;
+    max-width: 80%;
+    line-height: 1.55;
+    font-size: 16px;
+    animation: fadeIn 0.25s ease;
+    word-wrap: break-word;
+}
+
+/* USER BUBBLE */
+.bubble-user {
+    background: linear-gradient(135deg, #00e5ff, #33ffff);
+    color: #001416;
+    font-weight: 600;
+    margin-left: auto;
+    box-shadow: 0 0 14px rgba(0,255,255,0.7);
+}
+
+/* BOT BUBBLE */
+.bubble-bot {
+    background: rgba(0, 45, 55, 0.75);
+    color: cyan;
+    border: 1px solid cyan;
+    box-shadow: 0 0 14px rgba(0,255,255,0.25);
+}
+
+/* --------------------------- */
+/* INPUT AREA                  */
+/* --------------------------- */
+
+.chat-input-container {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px;
+    background: rgba(0, 255, 255, 0.04);
+    border: 1px solid rgba(0, 255, 255, 0.25);
+    border-radius: 16px;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 0 20px rgba(0,255,255,0.15);
+    animation: fadeIn 0.4s ease;
+}
+
+#chat-input {
+    flex: 1;
+    padding: 16px 20px;
+    font-size: 17px;
+    background: rgba(0, 40, 45, 0.7);
+    border: 1px solid cyan;
+    border-radius: 14px;
+    color: cyan;
+    transition: 0.25s ease;
+}
+
+#chat-input::placeholder {
+    color: #66ffff;
+    opacity: 0.6;
+}
+
+#chat-input:focus {
+    outline: none;
+    box-shadow: 0 0 18px cyan;
+    background: rgba(0, 70, 80, 0.85);
+}
+
+/* --------------------------- */
+/* SEND BUTTON                 */
+/* --------------------------- */
+
+#send-btn {
+    padding: 16px 26px;
+    font-size: 17px;
+    background: linear-gradient(135deg, cyan, #00aaff);
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    font-weight: 700;
+    color: #000;
+    transition: 0.3s ease;
+    box-shadow: 0 0 14px rgba(0,255,255,0.6);
+    animation: pulseBtn 2.5s infinite ease-in-out;
+}
+
+#send-btn:hover {
+    background: linear-gradient(135deg, #33ffff, cyan);
+    box-shadow: 0 0 22px cyan;
+    transform: translateY(-2px);
+}
+
+#send-btn:active {
+    transform: scale(0.96);
+}
+
+/* Button pulse animation */
+@keyframes pulseBtn {
+    0% { box-shadow: 0 0 10px cyan; }
+    50% { box-shadow: 0 0 25px cyan; }
+    100% { box-shadow: 0 0 10px cyan; }
+}
+
+/* --------------------------- */
+/* SCROLLBAR                   */
+/* --------------------------- */
+
+#chatbox::-webkit-scrollbar {
+    width: 10px;
+}
+#chatbox::-webkit-scrollbar-thumb {
+    background: cyan;
+    border-radius: 5px;
+}
+#chatbox::-webkit-scrollbar-track {
+    background: rgba(0, 60, 70, 0.3);
+    border-radius: 5px;
+}
+
+/* --------------------------- */
+/* FADE ANIMATION              */
+/* --------------------------- */
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+</style>
+{% endblock %}
+
+
+
+{% block content %}
+
+<h2>Checktune Chatbot</h2>
+<p class="muted">Ask anything about audio uploads, formats, instruments, or model results.</p>
+
+<div id="chatbox" class="chat-container"></div>
+
+<div class="chat-input-container">
+    <input id="chat-input" placeholder="Ask a question...">
+    <button id="send-btn">Send</button>
+</div>
+
+
+<script>
+const chatbox = document.getElementById("chatbox");
+const input = document.getElementById("chat-input");
+const sendBtn = document.getElementById("send-btn");
+
+function addUserMessage(msg) {
+    let bubble = document.createElement("div");
+    bubble.className = "bubble-user";
+    bubble.innerText = msg;
+    chatbox.appendChild(bubble);
+    chatbox.scrollTop = chatbox.scrollHeight;
+}
+
+function typeBotMessage(text) {
+    let bubble = document.createElement("div");
+    bubble.className = "bubble-bot";
+    chatbox.appendChild(bubble);
+
+    let i = 0;
+    function typing() {
+        if (i < text.length) {
+            bubble.innerHTML = text.substring(0, i + 1);
+            i++;
+            chatbox.scrollTop = chatbox.scrollHeight;
+            setTimeout(typing, 18);
+        }
+    }
+    typing();
+}
+
+sendBtn.addEventListener("click", sendMessage);
+input.addEventListener("keypress", function(e){
+    if (e.key === "Enter") sendMessage();
+});
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+        const cookies = document.cookie.split(";");
+        for (let cookie of cookies) {
+            cookie = cookie.trim();
+            if (cookie.startsWith(name + "=")) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function sendMessage() {
+    let message = input.value.trim();
+    if (!message) return;
+
+    addUserMessage(message);
+    input.value = "";
+
+    const csrftoken = getCookie('csrftoken');
+
+    fetch("{% url 'chatbot_api' %}", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrftoken
+        },
+        body: JSON.stringify({ message: message })
+    })
+    .then(res => res.json())
+    .then(data => {
+        typeBotMessage(data.reply);
+    });
+}
+</script>
+
+{% endblock %}

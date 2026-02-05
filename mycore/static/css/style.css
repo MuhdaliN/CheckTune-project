@@ -1,0 +1,110 @@
+/* Main wrapper centers content */
+.result-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+}
+
+/* Two-column grid */
+.info-container {
+    display: flex;
+    width: 90%;
+    max-width: 1300px;
+    gap: 60px;
+}
+
+/* LEFT COLUMN */
+.left-col {
+    width: 280px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.song-image {
+    width: 240px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.result-title {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.pred-label {
+    color: #1db954;
+    font-weight: bold;
+}
+
+.confidence {
+    margin-bottom: 10px;
+}
+
+.back-btn {
+    margin-top: 15px;
+    color: #1db954;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.back-btn:hover {
+    text-decoration: underline;
+}
+
+/* RIGHT COLUMN */
+.right-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.right-col h3 {
+    margin-bottom: 10px;
+}
+
+.audio-player {
+    width: 100%;
+    margin-bottom: 25px;
+}
+
+/* Chart sizing */
+#instrumentChart {
+    width: 100% !important;
+    height: 380px !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+    .info-container {
+        flex-direction: column;
+        gap: 40px;
+        align-items: center;
+    }
+
+    .left-col {
+        width: 100%;
+    }
+
+    .right-col {
+        width: 100%;
+    }
+}
+/* Add to your style.css file */
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(0, 229, 255, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(0, 229, 255, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(0, 229, 255, 0); }
+}
+
+.pulse-animation {
+    animation: pulse 2s infinite;
+}
+
+.glow-text {
+    text-shadow: 0 0 10px rgba(0, 229, 255, 0.8),
+                 0 0 20px rgba(0, 229, 255, 0.4),
+                 0 0 30px rgba(0, 229, 255, 0.2);
+}

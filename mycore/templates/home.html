@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Home • CheckTune{% endblock %}
+
+{% block content %}
+
+<!-- HERO SECTION -->
+<div class="box" style="text-align:center; padding:40px;">
+    <h1 style="color:#00e5ff;">Welcome to CheckTune</h1>
+    <p class="muted">
+        Identify instruments, explore music recommendations, and search your music database.
+    </p>
+
+    <div style="margin-top:25px;">
+        <a href="{% url 'upload' %}" class="btn" style="margin-right:12px;">Identify Instrument</a>
+        <a href="{% url 'music_recommendation' %}"class="btn" style="margin-right:12px;" >Music Recommendations</a>
+        <a href="{% url 'chatbot' %}" class="btn">Open Chatbot</a>
+    </div>
+</div>
+
+<!-- SEARCH BAR -->
+<div class="box" style="margin-top:30px;">
+    <h2 style="color:#00e5ff;">Search Songs</h2>
+    <input id="songSearch" placeholder="Search by title, artist, or genre...">
+</div>
+
+<!-- MUSIC DATABASE -->
+<div class="box" style="margin-top:20px;">
+    <h2 style="color:#00e5ff; text-align:center;">Music Lists 2025</h2>
+
+    <div class="song-grid">
+        {% for s in songs %}
+        <div class="song-card">
+            <img class="cover" src="{% static 'img/genre/default.jpg' %}" alt="Genre Cover">
+
+            <h3 class="song-title">{{ s.Title }}</h3>
+            <p class="song-artist">{{ s.Artist }}</p>
+            <p class="song-genre">{{ s.Genre }}</p>
+        </div>
+        {% empty %}
+        <p style="text-align:center;">No songs available</p>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- STYLES -->
+<style>
+.song-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.song-card {
+    width: 220px;
+    padding: 20px;
+    border: 1px solid aqua;
+    background: #001f23;
+    border-radius: 12px;
+    text-align: center;
+    transition: .3s;
+    box-shadow: 0 0 20px rgba(0,255,255,0.15);
+}
+
+.song-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 35px rgba(0,255,255,0.5);
+}
+
+.cover {
+    width: 160px;
+    height: 160px;
+    margin: auto;
+    border-radius: 50%;
+    border: 2px solid aqua;
+    margin-bottom: 15px;
+    object-fit: cover;
+}
+
+#songSearch {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid aqua;
+    border-radius: 8px;
+    background: #001a1e;
+    color: aqua;
+    margin-top: 10px;
+}
+
+#songSearch:focus {
+    outline: none;
+    box-shadow: 0 0 15px aqua;
+}
+</style>
+
+<!-- SCRIPTS -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    /* SEARCH FILTER */
+    document.getElementById("songSearch").addEventListener("keyup", function () {
+        let filter = this.value.toLowerCase();
+        document.querySelectorAll(".song-card").forEach(card => {
+            let text = card.innerText.toLowerCase();
+            card.style.display = text.includes(filter) ? "block" : "none";
+        });
+    });
+
+    /* GENRE IMAGE LOADER */
+    const genreBase = "{% static 'img/genre/' %}";
+    const defaultCover = "{% static 'img/genre/default.jpg' %}";
+
+    document.querySelectorAll(".song-card").forEach(card => {
+        const genreElement = card.querySelector(".song-genre");
+        const imgElement = card.querySelector(".cover");
+
+        if (!genreElement || !imgElement) return;
+
+        let genreName = genreElement.innerText.trim().toLowerCase();
+        let imgPath = `${genreBase}${genreName}.jpg`;
+
+        const tempImg = new Image();
+        tempImg.onload = function () {
+            imgElement.src = imgPath;
+        };
+        tempImg.onerror = function () { 
+            imgElement.src = defaultCover;
+        };
+        tempImg.src = imgPath;
+    });
+});
+</script>
+
+{% endblock %}
