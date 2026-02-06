@@ -5,7 +5,7 @@ soundfile>=0.12
 numpy>=1.24
 scipy>=1.10
 pandas>=1.5
-matplotlib>=3.7   # optional for visualizing during training
+matplotlib>=3.7   
 scikit-learn>=1.2
-gunicorn           # optional for deployment
-whitenoise         # optional static serving
+gunicorn           
+whitenoise         

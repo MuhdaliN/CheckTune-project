@@ -18,7 +18,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from django import forms
 
-music_data = pd.read_csv(r'C:\Users\refre\OneDrive\Desktop\CheckTunes(R)\ml\music_dataset.csv')
+music_data = pd.read_csv(r'C:\Users\refre\OneDrive\Desktop\GIT COMMIT\CheckTunes(R)\ml\music_dataset.csv')
 if 'description' not in music_data.columns:
     music_data['description'] = music_data['Title'] + ' ' + music_data['Artist'] + ' ' + music_data['Genre']
 
